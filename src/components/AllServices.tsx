@@ -1,240 +1,243 @@
 import React, { useState } from 'react';
-import { RefreshCw, Filter, Plus, Edit, Eye, Trash2, Search } from 'lucide-react';
-import { Service } from '../types';
+import { Plus, RotateCcw, Filter, Edit, Eye, Trash2, Calendar, Wrench } from 'lucide-react';
 
-const AllServices: React.FC = () => {
-  const [autoApproval, setAutoApproval] = useState<boolean>(true);
-  const [entriesPerPage, setEntriesPerPage] = useState<number>(10);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [services, setServices] = useState<Service[]>([
+interface AllCategoriesProps {
+  onAddCategory: () => void;
+  onEdit: (id: number) => void;
+}
+
+const ActiveCategories: React.FC<AllCategoriesProps> = ({ onAddCategory, onEdit }) => {
+  const [showFilter, setShowFilter] = useState(false);
+  const [filters, setFilters] = useState({
+    categoryName: '',
+    status: '',
+    fromDate: '',
+    toDate: ''
+  });
+
+  const categories = [
     {
       id: 1,
-      name: 'Hardware Services',
-      category: 'Computer/Laptop Repair & Services',
-      subCategory: 'Services',
-      amount: 1000,
+      name: 'AC Repair & Services',
+      description: 'Professional AC repair and maintenance services',
+      status: true,
       date: '25 Oct 2023',
-      status: 'active',
-      createdBy: 'provider',
-      image: 'https://images.pexels.com/photos/5474295/pexels-photo-5474295.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1'
+      servicesCount: 15,
+      image: 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 2,
-      name: 'AC Installation',
-      category: 'AC Repair & Services',
-      subCategory: 'Installation & Uninstallation',
-      amount: 1200,
-      date: '09 Sep 2023',
-      status: 'active',
-      createdBy: 'provider',
-      image: 'https://images.pexels.com/photos/8005394/pexels-photo-8005394.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1'
+      name: 'Computer/Laptop Repair & Services',
+      description: 'Expert computer and laptop repair services',
+      status: true,
+      date: '20 Oct 2023',
+      servicesCount: 12,
+      image: 'https://images.pexels.com/photos/3735781/pexels-photo-3735781.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 3,
-      name: 'AC Jet Pump Service',
-      category: 'AC Repair & Services',
-      subCategory: 'Deep Clean',
-      amount: 500,
-      date: '09 Sep 2023',
-      status: 'active',
-      createdBy: 'provider',
-      image: 'https://images.pexels.com/photos/8005394/pexels-photo-8005394.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1'
+      name: 'Plumbing Services',
+      description: 'Complete plumbing solutions for homes and offices',
+      status: true,
+      date: '18 Oct 2023',
+      servicesCount: 20,
+      image: 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg?auto=compress&cs=tinysrgb&w=400'
+    },
+    {
+      id: 4,
+      name: 'Electrical Services',
+      description: 'Professional electrical installation and repair',
+      status: false,
+      date: '15 Oct 2023',
+      servicesCount: 8,
+      image: 'https://images.pexels.com/photos/3735781/pexels-photo-3735781.jpeg?auto=compress&cs=tinysrgb&w=400'
+    },
+    {
+      id: 5,
+      name: 'Cleaning Services',
+      description: 'Deep cleaning and maintenance services',
+      status: true,
+      date: '12 Oct 2023',
+      servicesCount: 18,
+      image: 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg?auto=compress&cs=tinysrgb&w=400'
+    },
+    {
+      id: 6,
+      name: 'Photography & Videography',
+      description: 'Professional photography and videography services',
+      status: true,
+      date: '10 Oct 2023',
+      servicesCount: 6,
+      image: 'https://images.pexels.com/photos/3735781/pexels-photo-3735781.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
-  ]);
+  ];
 
-  const toggleServiceStatus = (id: number) => {
-    setServices(services.map(service => 
-      service.id === id 
-        ? { ...service, status: service.status === 'active' ? 'inactive' : 'active' }
-        : service
-    ));
+  const handleFilterChange = (field: string, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
-  const deleteService = (id: number) => {
-    setServices(services.filter(service => service.id !== id));
+  const handleRefresh = () => {
+    setShowFilter(false);
+    setFilters({
+      categoryName: '',
+      status: '',
+      fromDate: '',
+      toDate: ''
+    });
   };
 
-  const filteredServices = services.filter(service =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    service.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleFilterSubmit = () => {
+    console.log('Applying filters:', filters);
+  };
+
+  const handleStatusToggle = (id: number) => {
+    console.log('Toggle status for category:', id);
+  };
+
+  const handleDelete = (id: number) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      console.log('Delete category:', id);
+    }
+  };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                Services Management
-              </h1>
-              <p className="text-slate-600 mt-1">Manage and monitor all your services</p>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
+              <Wrench className="h-6 w-6 text-white" />
             </div>
-            <div className="flex items-center space-x-3">
-              <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                <RefreshCw size={20} />
-              </button>
-              <button className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-3 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                <Filter size={20} />
-              </button>
-              <button className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-3 rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                <Plus size={20} />
-              </button>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Active Categories</h1>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleRefresh}
+              className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Refresh
+            </button>
+            <button
+              onClick={() => setShowFilter(!showFilter)}
+              className="flex items-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filter
+            </button>
+           
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
-          {/* Controls */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <span className="text-sm font-semibold text-slate-700">Auto Approval</span>
-                <button
-                  onClick={() => setAutoApproval(!autoApproval)}
-                  className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-200 ${
-                    autoApproval ? 'bg-gradient-to-r from-emerald-500 to-emerald-600' : 'bg-slate-300'
-                  }`}
+        {/* Filter Panel */}
+        {showFilter && (
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-8 animate-in slide-in-from-top duration-300 flex">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+                <select
+                  value={filters.categoryName}
+                  onChange={(e) => handleFilterChange('categoryName', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <span
-                    className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-200 shadow-lg ${
-                      autoApproval ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
+                  <option value="">Select category</option>
+                  <option value="ac-repair">AC Repair & Services</option>
+                  <option value="computer-repair">Computer/Laptop Repair & Services</option>
+                  <option value="plumbing">Plumbing Services</option>
+                  <option value="electrical">Electrical Services</option>
+                  <option value="cleaning">Cleaning Services</option>
+                  <option value="photography">Photography & Videography</option>
+                </select>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-slate-600 font-medium">Search:</span>
-                <div className="relative">
-                  <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                    placeholder="Search services..."
-                  />
+<div className="flex justify-center items-center">
+                <button
+                  onClick={handleFilterSubmit}
+                  className="px-8 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  Search
+                </button>
+              </div>
+          </div>
+        )}
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {categories.map((category) => (
+            <div key={category.id} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <div className="relative">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute top-4 right-4">
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={category.status}
+                      onChange={() => handleStatusToggle(category.id)}
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                  </label>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{category.name}</h3>
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${category.status
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
+                    }`}>
+                    {category.status ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{category.description}</p>
+
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-sm text-gray-500">
+                    <span className="font-medium">{category.servicesCount}</span> Technicians
+                  </div>
+                  <div className="text-sm text-gray-500">{category.date}</div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => onEdit(category.id)}
+                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+                    <button className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-all duration-200">
+                      <Eye className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(category.id)}
+                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                    View Technicians
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-slate-600">Show</span>
-              <select
-                value={entriesPerPage}
-                onChange={(e) => setEntriesPerPage(Number(e.target.value))}
-                className="border border-slate-300 rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-              </select>
-              <span className="text-sm text-slate-600">entries</span>
-            </div>
-          </div>
-
-          {/* Services Table */}
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-slate-50 to-slate-100">
-                <tr>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">#</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Services</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Category</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Sub Category</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Amount</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Date</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Status</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Created By</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredServices.map((service, index) => (
-                  <tr key={service.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                    <td className="py-4 px-6 text-slate-900 font-medium">{index + 1}</td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center space-x-4">
-                        <img
-                          src={service.image}
-                          alt={service.name}
-                          className="w-14 h-14 rounded-xl object-cover shadow-md"
-                        />
-                        <span className="font-semibold text-slate-900">{service.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 text-slate-600">{service.category}</td>
-                    <td className="py-4 px-6 text-slate-600">{service.subCategory}</td>
-                    <td className="py-4 px-6 text-slate-900 font-bold">₹{service.amount}</td>
-                    <td className="py-4 px-6 text-slate-600">{service.date}</td>
-                    <td className="py-4 px-6">
-                      <button
-                        onClick={() => toggleServiceStatus(service.id)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
-                          service.status === 'active' 
-                            ? 'bg-gradient-to-r from-emerald-500 to-emerald-600' 
-                            : 'bg-slate-300'
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-lg ${
-                            service.status === 'active' ? 'translate-x-6' : 'translate-x-1'
-                          }`}
-                        />
-                      </button>
-                    </td>
-                    <td className="py-4 px-6 text-slate-600 capitalize">{service.createdBy}</td>
-                    <td className="py-4 px-6">
-                      <div className="flex flex-col space-y-2">
-                        <button className="flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 text-sm font-medium transition-colors">
-                          <Edit size={14} />
-                          <span>Edit</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
-                          <Eye size={14} />
-                          <span>View</span>
-                        </button>
-                        <button 
-                          onClick={() => deleteService(service.id)}
-                          className="flex items-center space-x-2 text-red-600 hover:text-red-700 text-sm font-medium transition-colors"
-                        >
-                          <Trash2 size={14} />
-                          <span>Delete</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          <div className="flex items-center justify-between mt-6">
-            <div className="text-sm text-slate-600">
-              Showing {filteredServices.length} of {services.length} entries
-            </div>
-            <div className="flex items-center space-x-2">
-              <button className="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors">
-                Previous
-              </button>
-              <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg text-sm shadow-lg">
-                1
-              </button>
-              <button className="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors">
-                Next
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default AllServices;
+export default ActiveCategories;
