@@ -1,47 +1,4 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
-import Dashboard from './components/Dashboard';
-import ServiceForm from './components/ServiceForm';
-import ServiceGallery from './components/ServiceGallery';
-import ServiceOffer from './components/ServiceOffer';
-import ProviderMap from './components/ProviderMap';
-import AllServices from './components/AllServices';
-
-function App() {
-  const [activeSection, setActiveSection] = useState<string>('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'add-service':
-        return <ServiceForm />;
-      case 'all-services':
-        return <AllServices />;
-      case 'work-gallery':
-        return <ServiceGallery />;
-      case 'service-offer':
-        return <ServiceOffer />;
-      case 'provider-map':
-        return <ProviderMap />;
-      case 'pending-services':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Pending Services</h1></div>;
-      case 'deleted-services':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Deleted Services</h1></div>;
-      case 'inactive-services':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Inactive Services</h1></div>;
-      case 'payments':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Payments</h1></div>;
-      case 'video-gallery':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Video Gallery</h1></div>;
-      case 'booking-list':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Booking List</h1></div>;
-      case 'call-bookings':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Call Bookings</h1></div>;
-=======
 import Dashboard from './pages/Dashboard';
 import AllCategories from './components/category/AllCategories';
 import AddCategory from './components/category/AddCategory';
@@ -91,7 +48,7 @@ function App() {
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard />;
-      
+
       // Categories
       case 'categories':
       case 'all-categories':
@@ -107,9 +64,10 @@ function App() {
       case 'deleted-categories':
         return <DeletedServices />;
 
-         case 'metaInfo':
+      // Meta Info
+      case 'metaInfo':
       case 'all-meta-info':
-        return <AllMetaInfo/>;
+        return <AllMetaInfo />;
       case 'add-meta-info':
         return <AddMetaInfo onBack={() => setCurrentPage('all-meta-info')} />;
 
@@ -198,7 +156,7 @@ function App() {
       case 'delete-advertisement':
         return <div className="p-8"><h1 className="text-2xl font-bold">Delete Advertisement</h1><p>Delete advertisement interface coming soon...</p></div>;
 
-      // Legacy routes (for backward compatibility)
+      // Legacy routes
       case 'services':
       case 'all-services':
         return <AllCategories onAddCategory={() => setCurrentPage('add-category')} onEdit={handleEditCategory} />;
@@ -228,42 +186,16 @@ function App() {
         return <BusinessAssociates />;
       case 'providers-details':
         return <ProvidersDetails />;
-      
->>>>>>> aa4280163f0de8d3de7b0f265b621f0f77836bfa
+
       default:
         return <Dashboard />;
     }
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-0'} overflow-hidden`}>
-        <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-y-auto">
-          {renderContent()}
-        </main>
-      </div>
-
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-    </div>
-=======
     <Layout currentPage={currentPage} onPageChange={handlePageChange}>
       {renderContent()}
     </Layout>
->>>>>>> aa4280163f0de8d3de7b0f265b621f0f77836bfa
   );
 }
 
