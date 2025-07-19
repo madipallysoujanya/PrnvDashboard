@@ -48,7 +48,7 @@ function App() {
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard />;
-      
+
       // Categories
       case 'categories':
       case 'all-categories':
@@ -64,9 +64,10 @@ function App() {
       case 'deleted-categories':
         return <DeletedServices />;
 
-         case 'metaInfo':
+      // Meta Info
+      case 'metaInfo':
       case 'all-meta-info':
-        return <AllMetaInfo/>;
+        return <AllMetaInfo />;
       case 'add-meta-info':
         return <AddMetaInfo onBack={() => setCurrentPage('all-meta-info')} />;
 
@@ -155,7 +156,7 @@ function App() {
       case 'delete-advertisement':
         return <div className="p-8"><h1 className="text-2xl font-bold">Delete Advertisement</h1><p>Delete advertisement interface coming soon...</p></div>;
 
-      // Legacy routes (for backward compatibility)
+      // Legacy routes
       case 'services':
       case 'all-services':
         return <AllCategories onAddCategory={() => setCurrentPage('add-category')} onEdit={handleEditCategory} />;
@@ -185,7 +186,7 @@ function App() {
         return <BusinessAssociates />;
       case 'providers-details':
         return <ProvidersDetails />;
-      
+
       default:
         return <Dashboard />;
     }
