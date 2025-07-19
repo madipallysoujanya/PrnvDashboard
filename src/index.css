@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+<<<<<<< HEAD
 
 @keyframes fadeIn {
   from {
@@ -41,3 +42,5 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+=======
+>>>>>>> aa4280163f0de8d3de7b0f265b621f0f77836bfa
